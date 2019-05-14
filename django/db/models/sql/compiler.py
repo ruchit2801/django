@@ -551,6 +551,10 @@ class SQLCompiler:
                     if self._meta_ordering:
                         # When the deprecation ends, replace with:
                         # order_by = None
+                        ordering = "', '".join([str(f) for f in self._meta_ordering])
+                        ordering.replace("'OrderBy", "OrderBy")
+                        ordering.replace(")'", ")")
+                        ordering = re.sub(r"F\((\w+)\)", r"F('\1')", ordering)                        
                         warnings.warn(
                             "%s QuerySet won't use Meta.ordering in Django 3.1. "
                             "Add .order_by('%s') to retain the current query." % (
